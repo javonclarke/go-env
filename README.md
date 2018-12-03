@@ -15,7 +15,7 @@ package main
 import (
   "log"
 
-  env "github.com/Netflix/go-env"
+  env "github.com/javonclarke/go-env"
 )
 
 type Environment struct {
@@ -31,7 +31,7 @@ type Environment struct {
 }
 
 func main() {
-  var environment env.Environment
+  var environment Environment
   es, err := env.UnmarshalFromEnviron(&environment)
   if err != nil {
     log.Fatal(err)
@@ -53,7 +53,7 @@ func main() {
   }
   es.Apply(cs)
 
-  environment = env.Environment{}
+  environment = Environment{}
   err = env.Unmarshal(es, &environment)
   if err != nil {
     log.Fatal(err)
