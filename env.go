@@ -199,8 +199,7 @@ func Marshal(v interface{}) (EnvSet, error) {
 		if !isValidTag(name) {
 			continue
 		}
-
-		if opts.Contains("omitempty") {
+		if opts.Contains("omitempty") && isEmptyValue(valueField) {
 			continue
 		}
 
@@ -208,9 +207,9 @@ func Marshal(v interface{}) (EnvSet, error) {
 			if valueField.IsNil() {
 				continue
 			}
-			es[tag] = fmt.Sprintf("%v", valueField.Elem().Interface())
+			es[name] = fmt.Sprintf("%v", valueField.Elem().Interface())
 		} else {
-			es[tag] = fmt.Sprintf("%v", valueField.Interface())
+			es[name] = fmt.Sprintf("%v", valueField.Interface())
 		}
 	}
 

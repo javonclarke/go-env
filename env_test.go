@@ -52,6 +52,9 @@ type ValidStruct struct {
 
 	// ExcludeField shouldn't exist in Envrion if there are no values set.
 	ExcludeField string `env:"EXCLUDE_FIELD,omitempty"`
+
+	// IncludeField should exist if in Environ if there is a value set.
+	IncludeField string `env:"INCLUDE_FIELD,omitempty"`
 }
 
 type UnsupportedStruct struct {
@@ -232,8 +235,28 @@ func TestMarshalOmitempty(t *testing.T) {
 	if err != nil {
 		t.Errorf("Expected no error but got '%s'", err)
 	}
+
 	if _, ok := environ["EXCLUDE_FIELD"]; ok {
 		t.Errorf("Expected 'EXCLUDE_FIELD' to be excluded.")
+	}
+}
+
+func TestMarshalOmitemptyWithValue(t *testing.T) {
+	validStruct := ValidStruct{
+		Home:         "/home/test",
+		Extra:        "extra",
+		Int:          1,
+		Bool:         true,
+		IncludeField: "value",
+	}
+
+	environ, err := Marshal(&validStruct)
+	if err != nil {
+		t.Errorf("Expected no error but got '%s'", err)
+	}
+
+	if _, ok := environ["INCLUDE_FIELD"]; !ok {
+		t.Errorf("Expected 'INCLUDE_FIELD'")
 	}
 }
 
